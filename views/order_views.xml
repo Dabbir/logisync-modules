@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="logistics_view_order_list" model="ir.ui.view">
+    <field name="name">logistics.order.list</field>
+    <field name="model">logistics.order</field>
+    <field name="arch" type="xml">
+      <list string="Pesanan">
+        <field name="name"/>
+        <field name="customer_id"/>
+        <field name="status"/>
+        <field name="tracking_number"/>
+        <field name="order_date"/>
+        <field name="total_amount"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="logistics_view_order_form" model="ir.ui.view">
+    <field name="name">logistics.order.form</field>
+    <field name="model">logistics.order</field>
+    <field name="arch" type="xml">
+      <form string="Pesanan">
+        <group>
+          <field name="name" />
+          <field name="customer_id" />
+          <field name="status" />
+          <field name="tracking_number" />
+          <field name="delivery_address" />
+          <field name="order_date" />
+          <field name="total_amount" />
+          <field name="estimate_delivery_time" />
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="logistics_action_order" model="ir.actions.act_window">
+    <field name="name">Pesanan</field>
+    <field name="res_model">logistics.order</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+</odoo>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="logistics_view_staff_list" model="ir.ui.view">
+    <field name="name">logistics.staff.list</field>
+    <field name="model">logistics.staff</field>
+    <field name="arch" type="xml">
+      <list string="Staf">
+        <field name="user_id"/>
+        <field name="position"/>
+        <field name="assigned_area"/>
+        <field name="contact_number"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="logistics_view_staff_form" model="ir.ui.view">
+    <field name="name">logistics.staff.form</field>
+    <field name="model">logistics.staff</field>
+    <field name="arch" type="xml">
+      <form string="Staf Logistik">
+        <group>
+          <field name="user_id" />
+          <field name="contact_number" />
+          <field name="position" />
+          <field name="assigned_area" />
+          <field name="schedule" />
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="logistics_action_staff" model="ir.actions.act_window">
+    <field name="name">Staf Logistik</field>
+    <field name="res_model">logistics.staff</field>
+    <field name="view_mode">list,form</field>
+  </record>
+</odoo>

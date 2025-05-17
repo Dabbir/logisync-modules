@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="logistics_view_shipment_list" model="ir.ui.view">
+    <field name="name">logistics.shipment.list</field>
+    <field name="model">logistics.logistics</field>
+    <field name="arch" type="xml">
+      <list string="Riwayat Pengiriman">
+        <field name="name"/>
+        <field name="order_id"/>
+        <field name="timestamp"/>
+        <field name="location"/>
+        <field name="status"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="logistics_view_shipment_form" model="ir.ui.view">
+    <field name="name">logistics.shipment.form</field>
+    <field name="model">logistics.logistics</field>
+    <field name="arch" type="xml">
+      <form string="Riwayat Pengiriman">
+        <group>
+          <field name="name" />
+          <field name="order_id" />
+          <field name="timestamp" />
+          <field name="location" />
+          <field name="status" />
+          <field name="note" />
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="logistics_action_shipment" model="ir.actions.act_window">
+    <field name="name">Riwayat Pengiriman</field>
+    <field name="res_model">logistics.logistics</field>
+    <field name="view_mode">list,form</field>
+  </record>
+</odoo>

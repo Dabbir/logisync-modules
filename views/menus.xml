@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Root Menu -->
+  <menuitem id="logistics_menu_root"
+            name="Logistik"
+            sequence="10" />
+
+  <!-- Submenu: Order -->
+  <menuitem id="logistics_menu_order"
+            name="Pesanan"
+            parent="logistics_menu_root"
+            action="logistics_action_order"
+            sequence="10"/>
+
+  <!-- Submenu: Shipment -->
+  <menuitem id="logistics_menu_shipment"
+            name="Riwayat Pengiriman"
+            parent="logistics_menu_root"
+            action="logistics_action_shipment"
+            sequence="20"/>
+
+  <!-- Submenu: Transaction -->
+  <menuitem id="logistics_menu_transaction"
+            name="Transaksi"
+            parent="logistics_menu_root"
+            action="logistics_action_transaction"
+            sequence="30"/>
+
+  <!-- Submenu: Partner -->
+  <menuitem id="logistics_menu_partner"
+            name="Mitra Logistik"
+            parent="logistics_menu_root"
+            action="logistics_action_partner"
+            sequence="40"/>
+
+  <!-- Submenu: Performance -->
+  <menuitem id="logistics_menu_performance"
+            name="Performa"
+            parent="logistics_menu_root"
+            action="logistics_action_performance"
+            sequence="50"/>
+
+  <!-- Submenu: Staff -->
+  <menuitem id="logistics_menu_staff"
+            name="Staf"
+            parent="logistics_menu_root"
+            action="logistics_action_staff"
+            sequence="60"/>
+</odoo>
