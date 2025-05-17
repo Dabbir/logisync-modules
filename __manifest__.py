@@ -9,12 +9,11 @@
     'version': '1.0',
     'depends': ['base'],
     'data': [
-      ],
-    'demo': [
-      ],
-    'qweb': [
-
+        'views/logistics_views.xml',
+        'views/logistics_menus.xml',
     ],
+    'demo': [],
+    'qweb': [],
     'installable': True,
     'application': True,
     'auto_install': False,
