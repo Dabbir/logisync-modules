@@ -9,6 +9,7 @@
     'version': '1.0',
     'depends': ['base'],
     'data': [
+        'security/ir.model.access.csv',
         'views/logistics_views.xml',
         'views/logistics_menus.xml',
     ],

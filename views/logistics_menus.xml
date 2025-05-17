@@ -3,7 +3,6 @@
   <!-- Menu Items -->
   <menuitem id="menu_logistics_root"
     name="Logistics"
-    parent="base.menu_custom"
     sequence="10"
   />
 

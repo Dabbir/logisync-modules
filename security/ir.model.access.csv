@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_logistics_order,access_logistics_order,model_logistics_order,,1,1,1,1
+access_logistics_logistics,access_logistics_logistics,model_logistics_logistics,,1,1,1,1
+access_logistics_partner,access_logistics_partner,model_logistics_partner,,1,1,1,1
+access_logistics_performance,access_logistics_performance,model_logistics_performance,,1,1,1,1
+access_logistics_staff,access_logistics_staff,model_logistics_staff,,1,1,1,1
+access_logistics_transaction,access_logistics_transaction,model_logistics_transaction,,1,1,1,1
