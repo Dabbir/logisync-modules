@@ -18,13 +18,15 @@
     <field name="model">logistics.staff</field>
     <field name="arch" type="xml">
       <form string="Staf Logistik">
-        <group>
-          <field name="user_id" />
-          <field name="contact_number" />
-          <field name="position" />
-          <field name="assigned_area" />
-          <field name="schedule" />
-        </group>
+        <sheet>
+          <group>
+            <field name="user_id" />
+            <field name="contact_number" />
+            <field name="position" />
+            <field name="assigned_area" />
+            <field name="schedule" />
+          </group>
+        </sheet>
       </form>
     </field>
   </record>

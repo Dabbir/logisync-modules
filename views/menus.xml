@@ -3,7 +3,7 @@
 
   <!-- Root Menu -->
   <menuitem id="logistics_menu_root"
-            name="Logistik"
+            name="LogiSync"
             sequence="10" />
 
   <!-- Submenu: Order -->

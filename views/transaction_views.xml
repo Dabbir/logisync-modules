@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
- <record id="logistics_view_transaction_list" model="ir.ui.view">
+  <record id="logistics_view_transaction_list" model="ir.ui.view">
     <field name="name">logistics.transaction.list</field>
     <field name="model">logistics.transaction</field>
     <field name="arch" type="xml">
@@ -19,14 +19,16 @@
     <field name="model">logistics.transaction</field>
     <field name="arch" type="xml">
       <form string="Transaksi Pembayaran">
-        <group>
-          <field name="name" />
-          <field name="order_id" />
-          <field name="transaction_date" />
-          <field name="payment_status" />
-          <field name="payment_method" />
-          <field name="amount" />
-        </group>
+        <sheet>
+          <group>
+            <field name="name" />
+            <field name="order_id" />
+            <field name="transaction_date" />
+            <field name="payment_status" />
+            <field name="payment_method" />
+            <field name="amount" />
+          </group>
+        </sheet>
       </form>
     </field>
   </record>

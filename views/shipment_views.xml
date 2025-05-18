@@ -10,6 +10,7 @@
         <field name="timestamp"/>
         <field name="location"/>
         <field name="status"/>
+        <field name="note" />
       </list>
     </field>
   </record>
@@ -19,14 +20,16 @@
     <field name="model">logistics.logistics</field>
     <field name="arch" type="xml">
       <form string="Riwayat Pengiriman">
-        <group>
-          <field name="name" />
-          <field name="order_id" />
-          <field name="timestamp" />
-          <field name="location" />
-          <field name="status" />
-          <field name="note" />
-        </group>
+        <sheet>
+          <group>
+            <field name="name" />
+            <field name="order_id" />
+            <field name="timestamp" />
+            <field name="location" />
+            <field name="status" />
+            <field name="note" />
+          </group>
+        </sheet>
       </form>
     </field>
   </record>

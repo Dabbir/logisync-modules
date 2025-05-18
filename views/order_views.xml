@@ -9,8 +9,10 @@
         <field name="customer_id"/>
         <field name="status"/>
         <field name="tracking_number"/>
+        <field name="delivery_address"/>
         <field name="order_date"/>
         <field name="total_amount"/>
+        <field name="estimate_delivery_time"/>
       </list>
     </field>
   </record>
@@ -20,16 +22,18 @@
     <field name="model">logistics.order</field>
     <field name="arch" type="xml">
       <form string="Pesanan">
-        <group>
-          <field name="name" />
-          <field name="customer_id" />
-          <field name="status" />
-          <field name="tracking_number" />
-          <field name="delivery_address" />
-          <field name="order_date" />
-          <field name="total_amount" />
-          <field name="estimate_delivery_time" />
-        </group>
+        <sheet>
+          <group>
+            <field name="name" />
+            <field name="customer_id" />
+            <field name="status" />
+            <field name="tracking_number" />
+            <field name="delivery_address" />
+            <field name="order_date" />
+            <field name="total_amount" />
+            <field name="estimate_delivery_time" />
+          </group>
+        </sheet>
       </form>
     </field>
   </record>

@@ -9,6 +9,7 @@
     'version': '1.0',
     'depends': ['base'],
     'data': [
+        'security/res_groups.xml',
         'security/ir.model.access.csv',
         'views/order_views.xml',
         'views/shipment_views.xml',

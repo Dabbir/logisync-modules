@@ -12,6 +12,11 @@ class LogisticsOrder(models.Model):
         ('shipped', 'Dikirim'),
         ('delivered', 'Terkirim')
     ], string="Status", default='draft')
+    transaction_ids = fields.One2many(
+        'logistics.transaction', 
+        'order_id', 
+        string='Transaksi Terkait'
+    )
     tracking_number = fields.Char(string="Nomor Resi")
     delivery_address = fields.Text(string="Alamat Pengiriman")
     order_date = fields.Datetime(string="Tanggal Pesanan", default=fields.Datetime.now)

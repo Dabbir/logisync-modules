@@ -9,6 +9,8 @@
         <field name="date_range_end"/>
         <field name="on_time_rate"/>
         <field name="avg_delivery_time"/>
+        <field name="avg_estimated_delivery_time" />
+        <field name="logistics_cost_per_order" />
         <field name="total_orders"/>
         <field name="logistics_partner_id"/>
       </list>
@@ -20,16 +22,18 @@
     <field name="model">logistics.performance</field>
     <field name="arch" type="xml">
       <form string="Performa Logistik">
-        <group>
-          <field name="date_range_start" />
-          <field name="date_range_end" />
-          <field name="on_time_rate" />
-          <field name="avg_delivery_time" />
-          <field name="avg_estimated_delivery_time" />
-          <field name="logistics_cost_per_order" />
-          <field name="total_orders" />
-          <field name="logistics_partner_id" />
-        </group>
+        <sheet>
+          <group>
+            <field name="date_range_start" />
+            <field name="date_range_end" />
+            <field name="on_time_rate" />
+            <field name="avg_delivery_time" />
+            <field name="avg_estimated_delivery_time" />
+            <field name="logistics_cost_per_order" />
+            <field name="total_orders" />
+            <field name="logistics_partner_id" />
+          </group>
+        </sheet>
       </form>
     </field>
   </record>

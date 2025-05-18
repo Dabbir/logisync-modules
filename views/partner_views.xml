@@ -16,10 +16,12 @@
     <field name="model">logistics.partner</field>
     <field name="arch" type="xml">
       <form string="Mitra Logistik">
-        <group>
-          <field name="name" />
-          <field name="contact_info" />
-        </group>
+        <sheet>
+          <group>
+            <field name="name" />
+            <field name="contact_info" />
+          </group>
+        </sheet>
       </form>
     </field>
   </record>
