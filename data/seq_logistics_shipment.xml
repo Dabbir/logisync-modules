@@ -1,0 +1,11 @@
+<odoo>
+  <data noupdate="1">
+    <record id="seq_logistics_shipment" model="ir.sequence">
+      <field name="name">ID Logistik</field>
+      <field name="code">logistics.logistics</field>
+      <field name="prefix">SHIP/</field>
+      <field name="padding">4</field>
+      <field name="number_next">1</field>
+    </record>
+  </data>
+</odoo>

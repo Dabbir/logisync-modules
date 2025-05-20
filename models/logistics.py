@@ -4,13 +4,14 @@ class LogisticsShipment(models.Model):
     _name = 'logistics.logistics'
     _description = 'Data Riwayat Pengiriman'
 
-    name = fields.Char(string="ID Logistik", required=True)
+    name = fields.Char(string="ID Logistik", required=True, readonly=True, default=lambda self: ('New'))
+
     order_id = fields.Many2one(
         'logistics.order',
         string="Pesanan",
         required=True,
         ondelete='cascade',
-        domain=[('status', '!=', 'draft')]  # only allow orders not in draft
+        domain=[('status', '!=', 'draft')] 
     )
     timestamp = fields.Datetime(string="Waktu Update", required=True, default=fields.Datetime.now)
     location = fields.Char(string="Lokasi", required=True)
@@ -25,14 +26,28 @@ class LogisticsShipment(models.Model):
     ], string="Status Pengiriman", required=True)
     note = fields.Text(string="Catatan Tambahan")
 
+    # @api.model
+    # def create(self, vals):
+    #     order = self.env['logistics.order'].browse(vals.get('order_id'))
+    #     if order and order.status == 'draft':
+    #         raise exceptions.UserError("Data logistik hanya dapat ditambahkan jika status pesanan bukan 'Draft'.")
+    #     shipment = super().create(vals)
+    #     shipment._update_order_status()
+    #     return shipment
+
     @api.model
     def create(self, vals):
+        if vals.get('name', ('New')) == ('New'):
+            vals['name'] = self.env['ir.sequence'].next_by_code('logistics.logistics') or ('New')
+
         order = self.env['logistics.order'].browse(vals.get('order_id'))
         if order and order.status == 'draft':
             raise exceptions.UserError("Data logistik hanya dapat ditambahkan jika status pesanan bukan 'Draft'.")
+
         shipment = super().create(vals)
         shipment._update_order_status()
         return shipment
+
 
     def write(self, vals):
         res = super().write(vals)

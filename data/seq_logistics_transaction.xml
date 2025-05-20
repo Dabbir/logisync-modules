@@ -1,0 +1,12 @@
+<odoo>
+  <data noupdate="1">
+    <record id="seq_logistics_transaction" model="ir.sequence">
+      <field name="name">Logistics Transaction</field>
+      <field name="code">logistics.transaction</field>
+      <field name="prefix">TRX/</field>
+      <field name="padding">5</field>
+      <field name="number_next">1</field>
+      <field name="implementation">standard</field>
+    </record>
+  </data>
+</odoo>

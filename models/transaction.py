@@ -4,7 +4,7 @@ class LogisticsTransaction(models.Model):
     _name = 'logistics.transaction'
     _description = 'Transaksi Pembayaran'
 
-    name = fields.Char(string="ID Transaksi", required=True)
+    name = fields.Char(string="ID Transaksi", required=True, readonly=True, default='New')
     order_id = fields.Many2one('logistics.order', string="Pesanan Terkait", required=True)
     transaction_date = fields.Datetime(string="Tanggal Transaksi", default=fields.Datetime.now)
     payment_status = fields.Selection([
@@ -20,8 +20,16 @@ class LogisticsTransaction(models.Model):
     ], string="Metode Pembayaran")
     amount = fields.Float(string="Jumlah Pembayaran")
     
+    # @api.model
+    # def create(self, vals):
+    #     transaction = super().create(vals)
+    #     transaction._check_order_payment_status()
+    #     return transaction
+
     @api.model
     def create(self, vals):
+        if vals.get('name', 'New') == 'New':
+            vals['name'] = self.env['ir.sequence'].next_by_code('logistics.transaction') or 'New'
         transaction = super().create(vals)
         transaction._check_order_payment_status()
         return transaction

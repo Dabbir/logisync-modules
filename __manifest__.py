@@ -18,6 +18,9 @@
         'views/performance_views.xml',
         'views/staff_views.xml',
         'views/menus.xml',
+        'data/seq_logistics_shipment.xml',
+        'data/seq_logistics_order.xml',
+        'data/seq_logistics_transaction.xml'
     ],
     'demo': [],
     'qweb': [],
