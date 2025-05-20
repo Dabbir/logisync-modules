@@ -4,47 +4,54 @@
   <!-- Root Menu -->
   <menuitem id="logistics_menu_root"
             name="LogiSync"
-            sequence="10" />
+            sequence="10" 
+            groups="logisync-modules.group_logistics_staff,logisync-modules.group_logistics_admin" />
 
   <!-- Submenu: Order -->
   <menuitem id="logistics_menu_order"
             name="Pesanan"
             parent="logistics_menu_root"
             action="logistics_action_order"
-            sequence="10"/>
+            sequence="10"
+            groups="logisync-modules.group_logistics_staff,logisync-modules.group_logistics_admin"/>
 
   <!-- Submenu: Shipment -->
   <menuitem id="logistics_menu_shipment"
             name="Riwayat Pengiriman"
             parent="logistics_menu_root"
             action="logistics_action_shipment"
-            sequence="20"/>
+            sequence="20"
+            groups="logisync-modules.group_logistics_staff,logisync-modules.group_logistics_admin"/>
 
   <!-- Submenu: Transaction -->
   <menuitem id="logistics_menu_transaction"
             name="Transaksi"
             parent="logistics_menu_root"
             action="logistics_action_transaction"
-            sequence="30"/>
+            sequence="30"
+            groups="logisync-modules.group_logistics_staff,logisync-modules.group_logistics_admin"/>
 
   <!-- Submenu: Partner -->
   <menuitem id="logistics_menu_partner"
             name="Mitra Logistik"
             parent="logistics_menu_root"
             action="logistics_action_partner"
-            sequence="40"/>
+            sequence="40"
+            groups="logisync-modules.group_logistics_staff,logisync-modules.group_logistics_admin"/>
 
   <!-- Submenu: Performance -->
   <menuitem id="logistics_menu_performance"
             name="Performa"
             parent="logistics_menu_root"
             action="logistics_action_performance"
-            sequence="50"/>
+            sequence="50"
+            groups="logisync-modules.group_logistics_staff,logisync-modules.group_logistics_admin"/>
 
   <!-- Submenu: Staff -->
   <menuitem id="logistics_menu_staff"
             name="Staf"
             parent="logistics_menu_root"
             action="logistics_action_staff"
-            sequence="60"/>
+            sequence="60"
+            groups="logisync-modules.group_logistics_admin"/>
 </odoo>
