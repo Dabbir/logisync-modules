@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api, exceptions
 
 class LogisticsTransaction(models.Model):
     _name = 'logistics.transaction'
@@ -19,3 +19,29 @@ class LogisticsTransaction(models.Model):
         ('cod', 'COD')
     ], string="Metode Pembayaran")
     amount = fields.Float(string="Jumlah Pembayaran")
+    
+    @api.model
+    def create(self, vals):
+        transaction = super().create(vals)
+        transaction._check_order_payment_status()
+        return transaction
+        
+    def write(self, vals):
+        res = super().write(vals)
+        if 'payment_status' in vals:
+            self._check_order_payment_status()
+        return res
+        
+    def _check_order_payment_status(self):
+        for transaction in self:
+            order = transaction.order_id
+            if order and order.status == 'draft':
+                all_paid = all(t.payment_status == 'paid' for t in order.transaction_ids)
+                if all_paid and order.transaction_ids:
+                    try:
+                        order.action_confirm()
+                    except exceptions.UserError:
+                        pass
+            
+            if transaction.payment_status == 'refunded' and order:
+                order.write({'status': 'bermasalah'})
