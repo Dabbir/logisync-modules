@@ -7,6 +7,7 @@
       <list string="Riwayat Pengiriman">
         <field name="name"/>
         <field name="order_id"/>
+        <field name="logistics_partner_id"/> <!-- Added partner field -->
         <field name="timestamp"/>
         <field name="location"/>
         <field name="status"/>
@@ -24,6 +25,7 @@
           <group>
             <field name="name" />
             <field name="order_id" />
+            <field name="logistics_partner_id"/> <!-- Added partner field -->
             <field name="timestamp" />
             <field name="location" />
             <field name="status" />

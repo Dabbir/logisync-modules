@@ -28,8 +28,8 @@ class LogisticsShipment(models.Model):
     @api.model
     def create(self, vals):
         order = self.env['logistics.order'].browse(vals.get('order_id'))
-        if order and order.status != 'confirmed':
-            raise exceptions.UserError("Data logistik hanya dapat ditambahkan jika status pesanan adalah 'Dikonfirmasi'.")
+        if order and order.status == 'draft':
+            raise exceptions.UserError("Data logistik hanya dapat ditambahkan jika status pesanan bukan 'Draft'.")
         shipment = super().create(vals)
         shipment._update_order_status()
         return shipment
