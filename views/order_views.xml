@@ -44,4 +44,11 @@
     <field name="view_mode">list,form</field>
   </record>
 
+  <record id="logistics_action_tracking_list" model="ir.actions.act_window.view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">list</field>
+    <field name="view_id" ref="logistics_view_order_list"/>
+    <field name="act_window_id" ref="logistics_action_tracking"/>
+  </record>
+
 </odoo>

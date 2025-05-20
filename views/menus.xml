@@ -54,4 +54,12 @@
             action="logistics_action_staff"
             sequence="60"
             groups="logisync-modules.group_logistics_admin"/>
+
+  <!-- Submenu: Tracking -->
+  <menuitem id="logistics_menu_tracking"
+            name="Tracking Pengiriman"
+            parent="logistics_menu_root"
+            action="logistics_action_tracking"
+            sequence="70"
+            groups="logisync-modules.group_logistics_staff,logisync-modules.group_logistics_admin"/>
 </odoo>

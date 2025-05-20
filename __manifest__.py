@@ -7,7 +7,7 @@
     'author': "Kelompok 1 K2",
     'category': 'Uncategorized',
     'version': '1.0',
-    'depends': ['base'],
+    'depends': ['base', 'website'],
     'data': [
         'security/res_groups.xml',
         'security/ir.model.access.csv',
@@ -17,11 +17,19 @@
         'views/partner_views.xml',
         'views/performance_views.xml',
         'views/staff_views.xml',
+        'views/tracking_views.xml',
+        'views/templates/tracking.xml',
         'views/menus.xml',
+        'views/website_routes.xml',
         'data/seq_logistics_shipment.xml',
         'data/seq_logistics_order.xml',
         'data/seq_logistics_transaction.xml'
     ],
+    'assets': {
+        'web.assets_frontend': [
+            'logisync-modules/static/src/css/tracking.css',
+        ],
+    },
     'demo': [],
     'qweb': [],
     'installable': True,
