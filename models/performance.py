@@ -84,10 +84,10 @@ class LogisticsPerformance(models.Model):
                     estimated_times.append(est_hours)
 
                 if order.shipment_ids:
-                    pickup = order.shipment_ids.filtered(lambda s: s.status == 'pickup')
+                    ordered = order.order_date
                     delivered = order.shipment_ids.filtered(lambda s: s.status == 'delivered')
-                    if pickup and delivered:
-                        dt = (delivered[-1].timestamp - pickup[0].timestamp).total_seconds() / 3600
+                    if ordered and delivered:
+                        dt = (delivered[-1].timestamp - ordered).total_seconds() / 3600
                         delivery_times.append(dt)
 
                         # Hitung ketepatan waktu
@@ -96,7 +96,9 @@ class LogisticsPerformance(models.Model):
 
             rec.avg_estimated_delivery_time = sum(estimated_times) / len(estimated_times) if estimated_times else 0
             rec.avg_delivery_time = sum(delivery_times) / len(delivery_times) if delivery_times else 0
-            rec.on_time_rate = (on_time_count / len(delivery_times) * 100) if delivery_times else 0
+            on_time_base = rec.total_delivered + rec.total_bermasalah
+            rec.on_time_rate = (on_time_count / on_time_base * 100) if on_time_base else 0
+
 
             # Biaya logistik
             transactions = self.env['logistics.transaction'].search([
