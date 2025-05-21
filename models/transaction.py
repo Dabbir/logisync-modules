@@ -5,8 +5,8 @@ class LogisticsTransaction(models.Model):
     _description = 'Transaksi Pembayaran'
 
     name = fields.Char(string="ID Transaksi", required=True, readonly=True, default='New')
-    order_id = fields.Many2one('logistics.order', string="Pesanan Terkait", required=True)
-    transaction_date = fields.Datetime(string="Tanggal Transaksi", default=fields.Datetime.now)
+    order_id = fields.Many2one('logistics.order', string="Pesanan Terkait", required=True, readonly=True)
+    transaction_date = fields.Datetime(string="Tanggal Transaksi", default=fields.Datetime.now, readonly=True)
     payment_status = fields.Selection([
         ('unpaid', 'Belum Dibayar'),
         ('paid', 'Sudah Dibayar'),
@@ -17,25 +17,36 @@ class LogisticsTransaction(models.Model):
         ('bank_transfer', 'Transfer Bank'),
         ('e_wallet', 'E-Wallet'),
         ('cod', 'COD')
-    ], string="Metode Pembayaran")
-    amount = fields.Float(string="Jumlah Pembayaran")
+    ], string="Metode Pembayaran", readonly=True)
+    amount = fields.Float(string="Jumlah Pembayaran", readonly=True)
     
-    # @api.model
-    # def create(self, vals):
-    #     transaction = super().create(vals)
-    #     transaction._check_order_payment_status()
-    #     return transaction
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('done', 'Done')
+    ], string="State", default='draft', readonly=True)
 
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('logistics.transaction') or 'New'
+        
+        vals['state'] = 'done'
+        
         transaction = super().create(vals)
         transaction._check_order_payment_status()
         transaction._update_performance_trigger()
         return transaction
         
     def write(self, vals):
+        for field in vals.keys():
+            if field not in ['payment_status', 'state']:
+                raise exceptions.UserError(f"Field '{field}' cannot be modified after creation. Only payment status can be updated.")
+                
+        for record in self:
+            if record.payment_status == 'paid' and 'payment_status' in vals:
+                if vals['payment_status'] != 'refunded':
+                    raise exceptions.UserError("Status pembayaran tidak dapat diubah setelah dibayar kecuali menjadi 'Dikembalikan'.")
+        
         res = super().write(vals)
         if 'payment_status' in vals:
             self._check_order_payment_status()
@@ -43,6 +54,10 @@ class LogisticsTransaction(models.Model):
         return res
     
     def unlink(self):
+        for record in self:
+            if record.payment_status != 'unpaid':
+                raise exceptions.UserError("Hanya transaksi dengan status 'Belum Dibayar' yang dapat dihapus.")
+                
         affected_dates = self.mapped('order_id.order_date')
         res = super().unlink()
         for date in affected_dates:
@@ -55,7 +70,6 @@ class LogisticsTransaction(models.Model):
             order = trx.order_id
             if order and order.order_date:
                 self.env['logistics.performance'].update_or_create_performance(order.order_date)
-
 
     def _check_order_payment_status(self):
         for transaction in self:

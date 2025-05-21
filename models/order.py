@@ -4,9 +4,8 @@ class LogisticsOrder(models.Model):
     _name = 'logistics.order'
     _description = 'Pesanan Pengiriman'
 
-    # name = fields.Char(string="Nomor Pesanan", required=True)
     name = fields.Char(string="Nomor Pesanan", required=True, readonly=True, default=lambda self: ('New'))
-    customer_id = fields.Many2one('res.partner', string="Pelanggan", required=True)
+    customer_id = fields.Many2one('res.partner', string="Pelanggan", required=True, readonly=True, states={'draft': [('readonly', False)]})
      
     status = fields.Selection([
         ('draft', 'Draft'),
@@ -18,22 +17,27 @@ class LogisticsOrder(models.Model):
     transaction_ids = fields.One2many(
         'logistics.transaction', 
         'order_id', 
-        string='Transaksi Terkait'
+        string='Transaksi Terkait',
+        readonly=True, 
+        states={'draft': [('readonly', False)]}
     )
     shipment_ids = fields.One2many(
         'logistics.logistics',
         'order_id',
-        string='Riwayat Pengiriman'
+        string='Riwayat Pengiriman',
+        readonly=True, 
+        states={'draft': [('readonly', False)]}
     )
-    tracking_number = fields.Char(string="Nomor Resi")
-    delivery_address = fields.Text(string="Alamat Pengiriman")
-    order_date = fields.Datetime(string="Tanggal Pesanan", default=fields.Datetime.now)
+    tracking_number = fields.Char(string="Nomor Resi", readonly=True, states={'draft': [('readonly', False)]})
+    delivery_address = fields.Text(string="Alamat Pengiriman", readonly=True, states={'draft': [('readonly', False)]})
+    order_date = fields.Datetime(string="Tanggal Pesanan", default=fields.Datetime.now, readonly=True, states={'draft': [('readonly', False)]})
     total_amount = fields.Float(string="Total Pembayaran", compute='_compute_total_amount', store=True)
-    estimate_delivery_time = fields.Datetime(string="Estimasi Waktu Tiba")
+    estimate_delivery_time = fields.Datetime(string="Estimasi Waktu Tiba", readonly=True, states={'draft': [('readonly', False)]})
     
     _sql_constraints = [
         ('tracking_number_unique', 'unique(tracking_number)', 'Nomor resi harus unik.')
     ]
+    
 
     @api.model
     def create(self, vals):
