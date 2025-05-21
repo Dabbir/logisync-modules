@@ -46,13 +46,32 @@ class LogisticsShipment(models.Model):
 
         shipment = super().create(vals)
         shipment._update_order_status()
+        shipment._update_performance_trigger()
         return shipment
 
 
     def write(self, vals):
         res = super().write(vals)
         self._update_order_status()
+        self._update_performance_trigger()
+        return res   
+
+
+    def unlink(self):
+        affected_dates = self.mapped('order_id.order_date')
+        res = super().unlink()
+        for date in affected_dates:
+            if date:
+                self.env['logistics.performance'].update_or_create_performance(date)
         return res
+
+
+    def _update_performance_trigger(self):
+        for shipment in self:
+            order = shipment.order_id
+            if order and order.order_date:
+                self.env['logistics.performance'].update_or_create_performance(order.order_date)
+
 
     def _update_order_status(self):
         for shipment in self:

@@ -1,46 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <record id="logistics_view_performance_list" model="ir.ui.view">
-    <field name="name">logistics.performance.list</field>
-    <field name="model">logistics.performance</field>
-    <field name="arch" type="xml">
-      <list string="Performa">
-        <field name="date_range_start"/>
-        <field name="date_range_end"/>
-        <field name="on_time_rate"/>
-        <field name="avg_delivery_time"/>
-        <field name="avg_estimated_delivery_time" />
-        <field name="logistics_cost_per_order" />
-        <field name="total_orders"/>
-        <field name="logistics_partner_id"/>
-      </list>
-    </field>
-  </record>
 
+  <!-- FORM VIEW readonly-->
   <record id="logistics_view_performance_form" model="ir.ui.view">
     <field name="name">logistics.performance.form</field>
     <field name="model">logistics.performance</field>
     <field name="arch" type="xml">
-      <form string="Performa Logistik">
+      <form string="Laporan Performa Bulanan" create="false" edit="false" delete="false">
         <sheet>
           <group>
-            <field name="date_range_start" />
-            <field name="date_range_end" />
-            <field name="on_time_rate" />
-            <field name="avg_delivery_time" />
-            <field name="avg_estimated_delivery_time" />
-            <field name="logistics_cost_per_order" />
-            <field name="total_orders" />
-            <field name="logistics_partner_id" />
+            <group>
+              <field name="month" readonly="1"/>
+              <field name="year" readonly="1"/>
+            </group>
+            <group>
+              <field name="date_range_start" readonly="1"/>
+              <field name="date_range_end" readonly="1"/>
+            </group>
+          </group>
+          <group string="Statistik Pengiriman">
+            <field name="total_orders" readonly="1"/>
+            <field name="total_draft" readonly="1"/>
+            <field name="total_confirmed" readonly="1"/>
+            <field name="total_shipped" readonly="1"/>
+            <field name="total_delivered" readonly="1"/>
+            <field name="total_bermasalah" readonly="1"/>
+          </group>
+          <group string="Waktu dan Biaya">
+            <field name="avg_delivery_time" readonly="1"/>
+            <field name="avg_estimated_delivery_time" readonly="1"/>
+            <field name="on_time_rate" readonly="1"/>
+            <field name="logistics_cost_per_order" readonly="1"/>
           </group>
         </sheet>
       </form>
     </field>
   </record>
 
-  <record id="logistics_action_performance" model="ir.actions.act_window">
-    <field name="name">Performa</field>
-    <field name="res_model">logistics.performance</field>
-    <field name="view_mode">list,form</field>
+  <!-- KANBAN VIEW  -->
+  <record id="logistics_view_performance_kanban" model="ir.ui.view">
+    <field name="name">logistics.performance.kanban</field>
+    <field name="model">logistics.performance</field>
+    <field name="arch" type="xml">
+      <kanban class="o_kanban_small_column">
+        <field name="month"/>
+        <field name="year"/>
+        <field name="total_orders"/>
+        <field name="avg_delivery_time"/>
+        <field name="on_time_rate"/>
+        <field name="logistics_cost_per_order"/>
+
+        <templates>
+          <t t-name="kanban-box">
+            <div class="oe_kanban_global_click o_kanban_card">
+              <div class="o_kanban_card_header">
+                <strong>Bulan: <t t-esc="record.month.raw_value"/>/<t t-esc="record.year.raw_value"/></strong>
+              </div>
+              <div>
+                <p><strong>Order:</strong> <t t-esc="record.total_orders.raw_value"/></p>
+                <p><strong>Rata-rata Kirim:</strong> <t t-esc="record.avg_delivery_time.raw_value"/> jam</p>
+                <p><strong>Ketepatan:</strong> <t t-esc="record.on_time_rate.raw_value"/>%</p>
+                <p><strong>Biaya/Order:</strong> Rp <t t-esc="record.logistics_cost_per_order.raw_value"/></p>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
   </record>
+
+  <!-- SEARCH VIEW -->
+  <record id="logistics_view_performance_search" model="ir.ui.view">
+    <field name="name">logistics.performance.search</field>
+    <field name="model">logistics.performance</field>
+    <field name="arch" type="xml">
+      <search string="Cari Performa">
+        <field name="month"/>
+        <field name="year"/>
+        <filter name="filter_current_year" string="Tahun Ini" domain="[('year','=',datetime.now().year)]"/>
+        <filter name="filter_banyak_order" string=">50 Order" domain="[('total_orders','>',50)]"/>
+      </search>
+    </field>
+  </record>
+
+  <!-- ACTION WINDOW -->
+  <record id="logistics_action_performance" model="ir.actions.act_window">
+    <field name="name">Laporan Performa</field>
+    <field name="res_model">logistics.performance</field>
+    <field name="view_mode">kanban,form</field>
+    <field name="search_view_id" ref="logistics_view_performance_search"/>
+    <field name="help" type="html">
+      <p>Belum ada data performa untuk bulan ini.</p>
+    </field>
+  </record>
+
 </odoo>

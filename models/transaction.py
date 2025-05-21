@@ -32,14 +32,31 @@ class LogisticsTransaction(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('logistics.transaction') or 'New'
         transaction = super().create(vals)
         transaction._check_order_payment_status()
+        transaction._update_performance_trigger()
         return transaction
         
     def write(self, vals):
         res = super().write(vals)
         if 'payment_status' in vals:
             self._check_order_payment_status()
+        self._update_performance_trigger()
+        return res
+    
+    def unlink(self):
+        affected_dates = self.mapped('order_id.order_date')
+        res = super().unlink()
+        for date in affected_dates:
+            if date:
+                self.env['logistics.performance'].update_or_create_performance(date)
         return res
         
+    def _update_performance_trigger(self):
+        for trx in self:
+            order = trx.order_id
+            if order and order.order_date:
+                self.env['logistics.performance'].update_or_create_performance(order.order_date)
+
+
     def _check_order_payment_status(self):
         for transaction in self:
             order = transaction.order_id

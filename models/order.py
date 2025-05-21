@@ -39,7 +39,29 @@ class LogisticsOrder(models.Model):
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('logistics.order') or 'New'
-        return super().create(vals)
+        record = super().create(vals)
+        record._update_performance_trigger()  
+        return record
+
+    
+    def write(self, vals):
+        res = super().write(vals)
+        self._update_performance_trigger()
+        return res
+
+    def _update_performance_trigger(self):
+        for order in self:
+            if order.order_date:
+                self.env['logistics.performance'].update_or_create_performance(order.order_date)
+
+
+    def unlink(self):
+        affected_dates = self.mapped('order_date')
+        res = super().unlink()
+        for date in affected_dates:
+            if date:
+                self.env['logistics.performance'].update_or_create_performance(date)
+        return res
 
     @api.depends('transaction_ids.amount')
     def _compute_total_amount(self):
