@@ -5,7 +5,7 @@ class LogisticsOrder(models.Model):
     _description = 'Pesanan Pengiriman'
 
     name = fields.Char(string="Nomor Pesanan", required=True, readonly=True, default=lambda self: ('New'))
-    customer_id = fields.Many2one('res.partner', string="Pelanggan", required=True, readonly=True, states={'draft': [('readonly', False)]})
+    customer_id = fields.Many2one('res.partner', string="Pelanggan", required=True, states={'draft': [('readonly', False)], 'new': [('readonly', False)]})
      
     status = fields.Selection([
         ('draft', 'Draft'),
@@ -18,26 +18,36 @@ class LogisticsOrder(models.Model):
         'logistics.transaction', 
         'order_id', 
         string='Transaksi Terkait',
-        readonly=True, 
         states={'draft': [('readonly', False)]}
     )
     shipment_ids = fields.One2many(
         'logistics.logistics',
         'order_id',
         string='Riwayat Pengiriman',
-        readonly=True, 
         states={'draft': [('readonly', False)]}
     )
-    tracking_number = fields.Char(string="Nomor Resi", readonly=True, states={'draft': [('readonly', False)]})
-    delivery_address = fields.Text(string="Alamat Pengiriman", readonly=True, states={'draft': [('readonly', False)]})
-    order_date = fields.Datetime(string="Tanggal Pesanan", default=fields.Datetime.now, readonly=True, states={'draft': [('readonly', False)]})
+    tracking_number = fields.Char(string="Nomor Resi", states={'draft': [('readonly', False)]})
+    delivery_address = fields.Text(string="Alamat Pengiriman", states={'draft': [('readonly', False)]})
+    order_date = fields.Datetime(string="Tanggal Pesanan", default=fields.Datetime.now, states={'draft': [('readonly', False)]})
     total_amount = fields.Float(string="Total Pembayaran", compute='_compute_total_amount', store=True)
-    estimate_delivery_time = fields.Datetime(string="Estimasi Waktu Tiba", readonly=True, states={'draft': [('readonly', False)]})
+    estimate_delivery_time = fields.Datetime(string="Estimasi Waktu Tiba", states={'draft': [('readonly', False)]})
     
     _sql_constraints = [
         ('tracking_number_unique', 'unique(tracking_number)', 'Nomor resi harus unik.')
     ]
     
+    # Set fields as readonly by default for existing records
+    def _get_default_readonly(self):
+        # This controls default readonly state
+        return self.id and self.status != 'draft'
+    
+    @api.model
+    def default_get(self, fields_list):
+        # This is called when creating a new record
+        result = super(LogisticsOrder, self).default_get(fields_list)
+        # Set status to 'draft' for new records
+        result['status'] = 'draft'
+        return result
 
     @api.model
     def create(self, vals):
@@ -47,8 +57,16 @@ class LogisticsOrder(models.Model):
         record._update_performance_trigger()  
         return record
 
-    
     def write(self, vals):
+        # If trying to edit fields when not in draft status
+        for record in self:
+            # Only allow status changes via action methods and computed fields to update
+            if record.status != 'draft' and vals.keys() != {'status'} and not all(key in ['total_amount', 'transaction_ids', 'shipment_ids'] for key in vals.keys()):
+                editable_fields = ['status', 'total_amount', 'transaction_ids', 'shipment_ids']
+                for field in vals.keys():
+                    if field not in editable_fields:
+                        raise exceptions.UserError(f"Field '{field}' cannot be modified when the order is not in Draft status.")
+        
         res = super().write(vals)
         self._update_performance_trigger()
         return res
@@ -58,8 +76,12 @@ class LogisticsOrder(models.Model):
             if order.order_date:
                 self.env['logistics.performance'].update_or_create_performance(order.order_date)
 
-
     def unlink(self):
+        # Prevent deletion of non-draft orders
+        for record in self:
+            if record.status != 'draft':
+                raise exceptions.UserError("Hanya pesanan dengan status 'Draft' yang dapat dihapus.")
+                
         affected_dates = self.mapped('order_date')
         res = super().unlink()
         for date in affected_dates:

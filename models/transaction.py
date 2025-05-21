@@ -5,8 +5,8 @@ class LogisticsTransaction(models.Model):
     _description = 'Transaksi Pembayaran'
 
     name = fields.Char(string="ID Transaksi", required=True, readonly=True, default='New')
-    order_id = fields.Many2one('logistics.order', string="Pesanan Terkait", required=True, readonly=True)
-    transaction_date = fields.Datetime(string="Tanggal Transaksi", default=fields.Datetime.now, readonly=True)
+    order_id = fields.Many2one('logistics.order', string="Pesanan Terkait", required=True)
+    transaction_date = fields.Datetime(string="Tanggal Transaksi", default=fields.Datetime.now)
     payment_status = fields.Selection([
         ('unpaid', 'Belum Dibayar'),
         ('paid', 'Sudah Dibayar'),
@@ -17,8 +17,8 @@ class LogisticsTransaction(models.Model):
         ('bank_transfer', 'Transfer Bank'),
         ('e_wallet', 'E-Wallet'),
         ('cod', 'COD')
-    ], string="Metode Pembayaran", readonly=True)
-    amount = fields.Float(string="Jumlah Pembayaran", readonly=True)
+    ], string="Metode Pembayaran")
+    amount = fields.Float(string="Jumlah Pembayaran")
     
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -38,14 +38,15 @@ class LogisticsTransaction(models.Model):
         return transaction
         
     def write(self, vals):
-        for field in vals.keys():
-            if field not in ['payment_status', 'state']:
-                raise exceptions.UserError(f"Field '{field}' cannot be modified after creation. Only payment status can be updated.")
+        for rec in self:
+            if rec.state == 'done':
+                for field in vals.keys():
+                    if field not in ['payment_status']:
+                        raise exceptions.UserError(f"Field '{field}' cannot be modified after creation. Only payment status can be updated.")
                 
-        for record in self:
-            if record.payment_status == 'paid' and 'payment_status' in vals:
-                if vals['payment_status'] != 'refunded':
-                    raise exceptions.UserError("Status pembayaran tidak dapat diubah setelah dibayar kecuali menjadi 'Dikembalikan'.")
+                if rec.payment_status == 'paid' and 'payment_status' in vals:
+                    if vals['payment_status'] != 'refunded':
+                        raise exceptions.UserError("Status pembayaran tidak dapat diubah setelah dibayar kecuali menjadi 'Dikembalikan'.")
         
         res = super().write(vals)
         if 'payment_status' in vals:
@@ -55,7 +56,7 @@ class LogisticsTransaction(models.Model):
     
     def unlink(self):
         for record in self:
-            if record.payment_status != 'unpaid':
+            if record.state == 'done' and record.payment_status != 'unpaid':
                 raise exceptions.UserError("Hanya transaksi dengan status 'Belum Dibayar' yang dapat dihapus.")
                 
         affected_dates = self.mapped('order_id.order_date')
