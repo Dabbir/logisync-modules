@@ -1,0 +1,53 @@
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.timeline-steps {
+    padding-left: 0;
+    list-style: none;
+    position: relative;
+}
+
+.timeline-steps:before {
+    content: '';
+    width: 2px;
+    height: 100%;
+    background-color: #e9ecef;
+    position: absolute;
+    left: 30px;
+    top: 0;
+}
+
+.timeline-step {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-number {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.timeline-info {
+    margin-left: 20px;
+}
+
+.timeline-info h4 {
+    margin-bottom: 5px;
+}

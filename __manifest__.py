@@ -18,6 +18,7 @@
         'views/performance_views.xml',
         'views/staff_views.xml',
         'views/tracking_views.xml',
+        'views/templates/homepage.xml',
         'views/templates/tracking.xml',
         'views/menus.xml',
         'views/website_routes.xml',
@@ -27,7 +28,9 @@
     ],
     'assets': {
         'web.assets_frontend': [
+            'logisync-modules/static/src/css/homepage.css',
             'logisync-modules/static/src/css/tracking.css',
+            'logisync-modules/static/src/js/homepage.js'
         ],
     },
     'demo': [],

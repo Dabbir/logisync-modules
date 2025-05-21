@@ -3,6 +3,11 @@ from odoo.http import request
 
 class LogisyncController(http.Controller):
     
+    @http.route('/', type='http', auth='public', website=True)
+    def logisync_homepage(self, **kw):
+        """LogiSync Homepage"""
+        return request.render('logisync-modules.logisync_homepage', {})
+
     @http.route('/tracking', type='http', auth='public', website=True)
     def tracking_form(self, **kw):
         """Halaman untuk mencari status pengiriman"""
