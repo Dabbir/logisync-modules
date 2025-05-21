@@ -4,6 +4,7 @@ from datetime import datetime
 class LogisticsPerformance(models.Model):
     _name = 'logistics.performance'
     _description = 'Performa Logistik Bulanan'
+    _order = 'year desc, month desc'
 
     month = fields.Integer(string="Bulan", required=True)
     year = fields.Integer(string="Tahun", required=True)

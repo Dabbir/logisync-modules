@@ -37,6 +37,23 @@
     </field>
   </record>
 
+  <!-- LIST VIEW-->
+  <record id="logistics_view_performance_list" model="ir.ui.view">
+    <field name="name">logistics.performance.list</field>
+    <field name="model">logistics.performance</field>
+    <field name="arch" type="xml">
+      <list string="Daftar Laporan Performa" create="false" delete="false">
+        <field name="month"/>
+        <field name="year"/>
+        <field name="total_orders"/>
+        <field name="avg_delivery_time"/>
+        <field name="on_time_rate"/>
+        <field name="logistics_cost_per_order"/>
+      </list>
+    </field>
+  </record>
+
+
   <!-- KANBAN VIEW  -->
   <record id="logistics_view_performance_kanban" model="ir.ui.view">
     <field name="name">logistics.performance.kanban</field>
@@ -87,7 +104,7 @@
   <record id="logistics_action_performance" model="ir.actions.act_window">
     <field name="name">Laporan Performa</field>
     <field name="res_model">logistics.performance</field>
-    <field name="view_mode">kanban,form</field>
+    <field name="view_mode">kanban,form,list</field>
     <field name="search_view_id" ref="logistics_view_performance_search"/>
     <field name="help" type="html">
       <p>Belum ada data performa untuk bulan ini.</p>
